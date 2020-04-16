@@ -1,5 +1,7 @@
 package com.falcon;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -20,25 +22,34 @@ public class BookController {
 
     @Autowired
     private BookRepository repository;
-
+    
+    private static final Logger LOGGER=LoggerFactory.getLogger(BookController.class);
+    
     // Find
     @GetMapping("/books")
     List<Book> findAll() {
-        return repository.findAll();
+    	LOGGER.info("Fetching the All the Books");
+    	List<Book> bookList = repository.findAll();
+        LOGGER.debug("List of Books currently are - " +bookList);
+        return bookList;
     }
 
     // Save
     @PostMapping("/books")
     @ResponseStatus(HttpStatus.CREATED)
     Book newBook(@Valid @RequestBody Book newBook) {
+    	LOGGER.info("New Book added - "+newBook);
         return repository.save(newBook);
     }
 
     // Find
     @GetMapping("/books/{id}")
     Book findOne(@PathVariable @Min(1) Long id) {
-        return repository.findById(id)
+    	LOGGER.info("fetching book by ID - "+id);
+        Book book = repository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
+        LOGGER.debug("Book Fetched is - " + book);
+        return book;
     }
 
     // Save or update
@@ -84,6 +95,7 @@ public class BookController {
 
     @DeleteMapping("/books/{id}")
     void deleteBook(@PathVariable Long id) {
+    	LOGGER.info("Book Deleted for id - "+id);
         repository.deleteById(id);
     }
 
