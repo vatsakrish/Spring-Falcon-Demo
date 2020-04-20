@@ -3,6 +3,7 @@ package com.falcon;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import com.falcon.error.validator.Author;
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "books")
 public class Book {
 
     @Id
@@ -19,7 +21,7 @@ public class Book {
     private Long id;
 
     @NotEmpty(message = "Please provide a name")
-    private String name;
+    private String book_name;
 
     @Author
     @NotEmpty(message = "Please provide a author")
@@ -35,13 +37,13 @@ public class Book {
 
     public Book(Long id, String name, String author, BigDecimal price) {
         this.id = id;
-        this.name = name;
+        this.book_name = name;
         this.author = author;
         this.price = price;
     }
 
     public Book(String name, String author, BigDecimal price) {
-        this.name = name;
+        this.book_name = name;
         this.author = author;
         this.price = price;
     }
@@ -55,11 +57,11 @@ public class Book {
     }
 
     public String getName() {
-        return name;
+        return book_name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.book_name = name;
     }
 
     public String getAuthor() {
@@ -82,7 +84,7 @@ public class Book {
     public String toString() {
         return "Book{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + book_name + '\'' +
                 ", author='" + author + '\'' +
                 ", price=" + price +
                 '}';

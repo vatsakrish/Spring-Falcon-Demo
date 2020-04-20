@@ -55,18 +55,23 @@ public class BookController {
     // Save or update
     @PutMapping("/books/{id}")
     Book saveOrUpdate(@RequestBody Book newBook, @PathVariable Long id) {
-
-        return repository.findById(id)
+    	
+    	LOGGER.info("fetching book by ID - "+id);
+    	Book book = repository.findById(id)
                 .map(x -> {
+                	LOGGER.debug("Updating the Book - " +x);
                     x.setName(newBook.getName());
                     x.setAuthor(newBook.getAuthor());
                     x.setPrice(newBook.getPrice());
                     return repository.save(x);
                 })
                 .orElseGet(() -> {
+                	LOGGER.debug("Creating the Book as it does not exist fir ID - " + id);
                     newBook.setId(id);
                     return repository.save(newBook);
                 });
+    	
+    	return book;
     }
 
     // update author only
